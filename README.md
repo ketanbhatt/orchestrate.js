@@ -34,9 +34,8 @@ var db = require('orchestrate')(token)
 Note, the client defaults to the Amazon US East Datacenter. If you've created your Application in a different datacenter, you'll need to configure the client with that Datacenter's Api URL. For example, for Amazon EU West:
 
 ```javascript
-var oio = require('orchestrate')
-oio.ApiEndPoint = "api.aws-eu-west-1.orchestrate.io"
-var db = oio(token)
+var oio = require('orchestrate');
+var db = oio(token, 'api.aws-eu-west-1.orchestrate.io');
 ```
 
 Please see the Orchestrate [MDC Docs](https://orchestrate.io/docs/multi-data-center) for more information on Multi-Datacenter.
