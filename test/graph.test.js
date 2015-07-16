@@ -37,7 +37,7 @@ suite('Graph', function () {
       .then(function (res) {
         assert.equal(2, res.length);
         for (var i in res) {
-          assert.equal(204, res[i].statusCode);
+          assert.equal(201, res[i].statusCode);
         }
         done();
       })
