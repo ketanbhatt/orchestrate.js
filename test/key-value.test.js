@@ -9,6 +9,7 @@ var assert = require('assert');
 var db = require('./creds')();
 var users = require('./testdata')('key-value.test');
 var util = require('util');
+var misc = require('./misc');
 
 suite('Key-Value', function () {
   suiteSetup(function(done) {
@@ -67,7 +68,7 @@ suite('Key-Value', function () {
         assert.equal(200, res.statusCode);
         assert.equal(1, res.body.count);
         assert.deepEqual(users.david, res.body.results[0].value);
-        assert.equal('/v0/'+users.collection+'?limit=1&afterKey=byrd@bowery.io', res.body.next);
+        misc.assertUrlsEqual(res.body.next, '/v0/'+users.collection+'?limit=1&afterKey=byrd@bowery.io');
         return db.list(users.collection, {limit:1, afterKey:users.david.email});
       })
       .then(function (res) {

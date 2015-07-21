@@ -9,7 +9,7 @@ var assert = require('assert');
 var db = require('./creds')();
 var util = require('util');
 
-var collection = 'patch.test'
+var collection = 'patch.test_' + process.version;
 var key = 'test-key-1'
 // example doc used in all tests. it is reset every before each test.
 var orig = {

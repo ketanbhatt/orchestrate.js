@@ -7,7 +7,7 @@ node_js:
 notifications:
   email:
     - steve@bowery.io
-    - max@orchestrate.io
+    - benji.smith@ctl.io
 
 after_success:
 - npm run coveralls
