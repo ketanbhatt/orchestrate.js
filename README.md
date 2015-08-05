@@ -380,7 +380,53 @@ db.newGraphBuilder()
 .to('movies', 'Superbad')
 ```
 
+We can optionally include a JSON object representing the properties of the relationship -- which are distinct from the properties of the two items connected by the relationship -- like this:
+
+```javascript
+db.newGraphBuilder()
+.create()
+.data({ "rating" : "5 Stars" })
+.from('users', 'Steve')
+.related('likes')
+.to('movies', 'Superbad')
+```
+
+We can use [conditional put statements](https://orchestrate.io/docs/api/#key/value/put-(create/update)) to determine whether or not the store operation will occur. If a ref value is provided an `update` will occur if there is a valid match, if false is provided, a `create` will occur if there is no match.
+
+
+```javascript
+// update if ref matches
+db.newGraphBuilder()
+.create()
+.data({ "rating" : "4 Stars" })
+.ref('cbb48f9464612f20')
+.from('users', 'Steve')
+.related('likes')
+.to('movies', 'Superbad')
+
+// create if no previous relationship
+db.newGraphBuilder()
+.create()
+.data({ "rating" : "4 Stars" })
+.ref(false)
+.from('users', 'Steve')
+.related('likes')
+.to('movies', 'Superbad')
+```
+
+
+After storing this relationship, we can retrieve its properties like this:
+
+```javascript
+db.newGraphReader()
+.get()
+.from('users', 'Steve')
+.related('likes')
+.to('movies', 'Superbad')
+```
+
 We can then look up all the different items Steve likes:
+
 ```javascript
 db.newGraphReader()
 .get()
@@ -389,15 +435,18 @@ db.newGraphReader()
 ```
 
 We can even take this another step further:
+
 ```javascript
 db.newGraphReader()
 .get()
 .from('users', 'Steve')
 .related('friends', 'likes')
 ```
+
 This will return all of the things that friends of Steve have liked. This assumes a friend relation has previously been defined between Steve and another user.
 
 Orchestrate supports offsets and limits for graph relationships as well. To set those values:
+
 ```javascript
 db.newGraphReader()
 .get()
@@ -408,6 +457,7 @@ db.newGraphReader()
 ```
 
 If we want to delete a graph relationship:
+
 ```javascript
 db.newGraphBuilder()
 .remove()
@@ -420,6 +470,7 @@ db.newGraphBuilder()
 Events are time-ordered objects that exist with the context of a Key-Value object. Consider comments on a post or messages in a thread.
 
 Creating an event:
+
 ```javascript
 db.newEventBuilder()
 .from('users', 'Steve')
@@ -429,6 +480,7 @@ db.newEventBuilder()
 ```
 
 Creating an event at a specified time:
+
 ```javascript
 db.newEventBuilder()
 .from('users', 'Steve')
@@ -439,6 +491,7 @@ db.newEventBuilder()
 ```
 
 Listing events:
+
 ```javascript
 db.newEventReader()
 .from('users', 'Steve')

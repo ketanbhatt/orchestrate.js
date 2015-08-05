@@ -9,6 +9,7 @@ var db = require('./creds')();
 var users = require('./testdata')('search.test');
 var Q = require('kew');
 var util = require('util');
+var misc = require('./misc');
 
 suite('Search', function () {
   suiteSetup(function (done) {
@@ -66,7 +67,7 @@ suite('Search', function () {
         // XXX: API inconsistency?
         //        assert.equal(2, res.body.total_count);
         assert.equal(1, res.body.count);
-        assert.equal(res.body.next, '/v0/'+users.collection+'?limit=1&query=*&offset=2');
+        misc.assertUrlsEqual(res.body.next, '/v0/'+users.collection+'?limit=1&query=*&offset=2');
         done();
       })
       .fail(function (res) {

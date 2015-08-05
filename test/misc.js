@@ -8,6 +8,23 @@ var assert = require('assert');
 var db = require('./creds')();
 var Q = require('kew');
 var util = require('util');
+var url = require('url');
+
+function assertUrlsEqual(a, b) {
+  var aUrl = url.parse(a);
+  var bUrl = url.parse(b);
+  assert.equal(aUrl.hostname, bUrl.hostname);
+  assert.equal(aUrl.port, bUrl.port);
+  assert.equal(aUrl.hash, bUrl.hash);
+  var aUrlQueryParts = aUrl.query.split("&");
+  var bUrlQueryParts = bUrl.query.split("&");
+  assert.equal(aUrlQueryParts.length, bUrlQueryParts.length);
+  aUrlQueryParts.sort();
+  bUrlQueryParts.sort();
+  for (var i = 0; i < aUrlQueryParts.length; i++) {
+    assert.equal(aUrlQueryParts[i], bUrlQueryParts[i]);
+  }
+}
 
 suite('Misc', function () {
   test('Service ping', function(done) {
@@ -23,3 +40,5 @@ suite('Misc', function () {
       });
   });
 });
+
+module.exports.assertUrlsEqual = assertUrlsEqual;
