@@ -28,14 +28,14 @@ $ npm test
 # Creating a Client
 
 ```javascript
-var db = require('orchestrate')(token)
+var db = require('orchestrate')(token, [cache])
 ```
 
 Note, the client defaults to the Amazon US East Datacenter. If you've created your Application in a different datacenter, you'll need to configure the client with that Datacenter's Api URL. For example, for Amazon EU West:
 
 ```javascript
 var oio = require('orchestrate');
-var db = oio(token, 'api.aws-eu-west-1.orchestrate.io');
+var db = oio(token, 'api.aws-eu-west-1.orchestrate.io', [token]);
 ```
 
 Please see the Orchestrate [MDC Docs](https://orchestrate.io/docs/multi-data-center) for more information on Multi-Datacenter.
@@ -565,3 +565,35 @@ db.ping()
   // your key is INVALID
 })
 ```
+
+## Miscellaneous
+
+#### Cache
+
+If you want to maintain cache on your server, initialize orchestrate like:
+
+```javascript
+var db = require('orchestrate')(token, true)
+```
+
+where ``true`` is an optional argument. By default cache is disabled. Each item in the cache lives for an hour before expiring.
+Right now the cache is maintained for all get requests, and flushed every time any other request is made. This is a bad way of keeping the cache up to date, but works. It can be improved in future to flush only the data that gets changed. 
+Also, make sure you **deepClone** the result and make changes to that clone. Do not modify the original result.
+This is because :
+
+```javascript
+db.get('collection', 'key')
+.then(function (result) {
+  var my_result = result
+  my_result.someOldKey = someNewValue
+})
+.fail(function (err) {
+
+})
+```
+
+``my_result`` will be a reference to the result, and any changes made to it are reflected in the original result (which is stored in the cache), so next time you fetch from cache, it will be different from what you expect, and your program won't work as expected.
+You can use [lodash](https://lodash.com/docs#cloneDeep) for making a Deep Clone of the returned object.
+
+
+
