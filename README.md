@@ -577,7 +577,9 @@ var db = require('orchestrate')(token, true)
 ```
 
 where ``true`` is an optional argument. By default cache is disabled. Each item in the cache lives for an hour before expiring.
+
 Right now the cache is maintained for all get requests, and flushed every time any other request is made. This is a bad way of keeping the cache up to date, but works. It can be improved in future to flush only the data that gets changed. 
+
 Also, make sure you **deepClone** the result and make changes to that clone. Do not modify the original result.
 This is because :
 
@@ -593,6 +595,7 @@ db.get('collection', 'key')
 ```
 
 ``my_result`` will be a reference to the result, and any changes made to it are reflected in the original result (which is stored in the cache), so next time you fetch from cache, it will be different from what you expect, and your program won't work as expected.
+
 You can use [lodash](https://lodash.com/docs#cloneDeep) for making a Deep Clone of the returned object.
 
 
